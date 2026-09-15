@@ -5,6 +5,14 @@ const app = express()
 const httpProxy = require('http-proxy')
 const proxy = httpProxy.createProxyServer();
 
+// proxy.on('error', (error, req, res) => {
+//     console.error(`Proxy request failed: ${error.code}`)
+//     if (!res.headersSent) {
+//         res.writeHead(502, { 'Content-Type': 'application/json' })
+//     }
+//     res.end(JSON.stringify({ error: 'Service unavailable' }))
+// })
+
 //REDIRECT TO THE STUDENT MICROSERVICE
 app.use('/login', (req, res) => {
     console.log("INSIDE API GATEWAY STUDENT ROUTE")
@@ -21,9 +29,11 @@ app.use('/ad', (req, res) => {
 })
 app.use('/user', (req, res) => {
     console.log("INSIDE API GATEWAY USER ROUTE")
-    proxy.web(req, res, { target: 'http://localhost:5003' });
+    proxy.web(req, res, { target: 'http://localhost:5002' });
 })
 
-app.listen(5000, () => {
-    console.log("API Gateway Service is running on PORT NO : ", 5000)
+const port = process.env.PORT || 5005;
+
+app.listen(port, () => {
+    console.log("API Gateway Service is running on PORT NO : ", port)
 })

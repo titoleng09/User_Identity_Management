@@ -12,7 +12,7 @@ app.get("/", (req,res) => {
     res.send("Hello Admin")
 })
 
-app.get("/ad", (res,res) => {
+app.get("/ad", (req,res) => {
     res.send("Send some requests")
 })
 

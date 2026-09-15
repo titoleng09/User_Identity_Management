@@ -5,7 +5,7 @@ var bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
 const dbconnect = require('./dbconnect.js');
-const UserModel = require('./user_schema.js');
+// const UserModel = require('./user_schema.js');
 
 /*
 In the postman use the following URL
@@ -26,4 +26,4 @@ app.get("/", (req,res) => {
 })
 
 // START THE EXPRESS SERVER. 5000 is the PORT NUMBER
-app.listen(5004, () => console.log('EXPRESS Server Started at Port No: 5001'));
+app.listen(5004, () => console.log('EXPRESS Server Started at Port No: 5004'));
