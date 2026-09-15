@@ -12,8 +12,62 @@ app.get("/", (req,res) => {
     res.send("Hello Admin")
 })
 
-app.get("/ad", (req,res) => {
-    res.send("Send some requests")
+app.get("/searchuser", async(req,res) => {
+     try {
+
+        const { name, email } = req.query;
+
+        const response = await axios.get(
+            "http://localhost:5002/users/search",
+            {
+                params: {
+                    name,
+                    email
+                }
+            }
+        );
+
+        res.status(200).json(response.data);
+
+    } catch (error) {
+
+        if (error.response) {
+            return res.status(error.response.status).json(
+                error.response.data
+            );
+        }
+
+        res.status(500).json({
+            message: "User service unavailable"
+        });
+    }
+})
+app.get("/viewallusers",async (req, res) => {
+
+    try {
+
+        const response = await axios.get(
+            "http://localhost:5002/users"
+        );
+
+        res.status(200).json(response.data);
+
+    } catch (error) {
+
+        if (error.response) {
+            return res.status(error.response.status).json(
+                error.response.data
+            );
+        }
+
+        res.status(500).json({
+            message: "User service unavailable"
+        });
+    }
+})
+
+app.delete("/deleteuser", (req,res) => {
+
 })
 
 // START THE EXPRESS SERVER. 5000 is the PORT NUMBER
