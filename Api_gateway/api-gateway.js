@@ -1,15 +1,16 @@
 const express = require('express');
 const app = express();
 
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({
+    path: path.join(__dirname, '.env')
+});
 
 // USE PROXY SERVER TO REDIRECT INCOMING REQUEST
 const httpProxy = require('http-proxy');
 const proxy = httpProxy.createProxyServer();
 
-const jwt = require('jsonwebtoken');
-const authenticateToken = require("./auth.js")
-const authorizeRole = require("./auth.js")
+const { authenticateToken, authorizeRole } = require("./auth.js");
 
 
 app.use('/login', (req, res) => {
@@ -47,14 +48,15 @@ app.use(
     }
 );
 
-
 app.use(
     '/user',
     authenticateToken,
-    authorizeRole('user'),
+    authorizeRole(['admin', 'user', 'student']),
     (req, res) => {
 
         console.log("INSIDE API GATEWAY USER ROUTE");
+
+        req.url = `/users${req.url}`;
 
         proxy.web(req, res, {
             target: 'http://localhost:5002'

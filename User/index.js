@@ -115,48 +115,103 @@ app.get("/users/search", async (req, res) => {
     }
 });
 
-app.get("/users", async (req, res) => {
+app.get("/users/viewprofile", async (req, res) => {
+
     try {
 
-        const users = await userModel.find().select("-password");
+        const userId = req.headers["x-user-id"];
 
-        res.status(200).json({
-            message: "All users retrieved successfully",
-            users
-        });
-
-    } catch (error) {
-
-        res.status(500).json({
-            message: "Server error"
-        });
-    }
-});
-
-app.delete("/users/:email", async (req, res) => {
-    try {
-
-        const user = await userModel.findOneAndDelete({
-            email: req.params.email
-        });
-
-        if (!user) {
-            return res.status(404).json({
-                message: "User Not Found"
+        if (!userId) {
+            return res.status(401).json({
+                message: "User ID not provided"
             });
         }
 
-        res.status(200).json({
-            message: "User deleted successfully"
+        const user = await userModel.findById(userId)
+            .select("-password");
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Profile retrieved successfully",
+            user
         });
 
     } catch (error) {
 
-        res.status(500).json({
+        console.error(error);
+
+        return res.status(500).json({
             message: "Server error"
         });
     }
 });
 
+app.put("/users/updateprofile", async (req, res) => {
+
+    try {
+
+        const userId = req.headers["x-user-id"];
+
+        if (!userId) {
+            return res.status(401).json({
+                message: "User ID not provided"
+            });
+        }
+
+        const { name, email, phone, password } = req.body;
+
+        const updateData = {};
+
+        if (name) {
+            updateData.name = name;
+        }
+
+        if (email) {
+            updateData.email = email;
+        }
+
+        if (phone) {
+            updateData.phone = phone;
+        }
+
+        // Hash password if user wants to change it
+        if (password) {
+            updateData.password = await bcrypt.hash(password, 10);
+        }
+
+        const updatedUser = await userModel.findByIdAndUpdate(
+            userId,
+            updateData,
+            {
+                new: true,
+                runValidators: true
+            }
+        ).select("-password");
+
+        if (!updatedUser) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        return res.status(200).json({
+            message: "Profile updated successfully",
+            user: updatedUser
+        });
+
+    } catch (error) {
+
+        console.error(error);
+
+        return res.status(500).json({
+            message: "Server error"
+        });
+    }
+});
 // START THE EXPRESS SERVER. 5000 is the PORT NUMBER
 app.listen(5002, () => console.log('EXPRESS Server Started at Port No: 5002'));

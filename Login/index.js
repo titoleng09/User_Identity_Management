@@ -3,7 +3,10 @@ var app = express();
 
 var bodyParser = require("body-parser");
 app.use(bodyParser.json());
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({
+  path: path.join(__dirname, '.env')
+});
 app.use(express.urlencoded({extended:false}));
 
 const dbconnect = require('./dbconnect.js');
