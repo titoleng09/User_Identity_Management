@@ -1,53 +1,61 @@
 const express = require('express');
-var app = express();
+const app = express();
 
-var bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 app.use(bodyParser.json());
-app.use(express.urlencoded({extended:false}));
+app.use(express.urlencoded({ extended: false }));
 
-const dbconnect = require('./dbconnect.js');
+require('./dbconnect.js');
 
-/*
-In the postman use the following URL
-localhost:5000/reg
-
-{
-  "firstname":"Joe",
-  "email":"a@gmail.com",
-  "password":"abc",
-  "mobile": 12345678,
-  "role": "student"
-}
-
-*/
-//REG API
 const axios = require("axios");
 
+
+// REGISTER API
 app.post(["/", "/register"], async (req, res) => {
-  try {
-    const response = await axios.post(
-      "http://localhost:5002/users",
-      {
-        name: req.body.name || req.body.firstname,
-        email: req.body.email,
-        password: req.body.password,
-        role: req.body.role,
-        phone: req.body.phone || req.body.mobile
-      }
-    );
+    try {
 
-    res.status(201).json({
-      message: "Registration successful",
-      user: response.data
-    });
+        const response = await axios.post(
+            "http://172.31.28.20:5002/users",
+            {
+                name: req.body.name || req.body.firstname,
+                email: req.body.email,
+                password: req.body.password,
+                role: req.body.role,
+                phone: req.body.phone || req.body.mobile
+            }
+        );
 
-  } catch (error) {
-    res.status(500).json({
-      message: "Registration failed",
-      error: error.response?.data?.message || error.message
-    });
-  }
+        res.status(201).json({
+            message: "Registration successful",
+            user: response.data
+        });
+
+    } catch (error) {
+
+        console.error("REGISTRATION ERROR:", error.message);
+
+        if (error.response) {
+            return res.status(error.response.status).json({
+                message: "Registration failed",
+                error: error.response.data?.message || error.response.data
+            });
+        }
+
+        res.status(500).json({
+            message: "Registration failed",
+            error: "User service unavailable"
+        });
+    }
 });
 
-// START THE EXPRESS SERVER. 5000 is the PORT NUMBER
-app.listen(5003, () => console.log('EXPRESS Server Started at Port No: 5003'));
+
+// TEST ROUTE
+app.get("/", (req, res) => {
+    res.send("Hello Register");
+});
+
+
+// START SERVER
+app.listen(5003, () => {
+    console.log('EXPRESS Server Started at Port No: 5003');
+});
