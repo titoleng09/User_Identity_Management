@@ -63,6 +63,8 @@ app.post(["/", "/log"], async (req, res) => {
             });
         }
 
+        const jwt_scret = "CXf97UB3LK6BZjxmBhnwGrkPiBTZ0WxKYxOzK0t2YFr"
+
         // Generate JWT
         const token = jwt.sign(
             {
@@ -70,7 +72,7 @@ app.post(["/", "/log"], async (req, res) => {
                 email: user.email,
                 role: user.role
             },
-            process.env.JWT_SECRET,
+            jwt_scret,
             {
                 expiresIn: "1h"
             }

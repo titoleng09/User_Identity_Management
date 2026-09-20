@@ -35,8 +35,8 @@ app.use('/reg', (req, res) => {
 
 app.use(
     '/ad',
-    // authenticateToken,
-    // authorizeRole('admin'),
+    authenticateToken,
+    authorizeRole('admin'),
     (req, res) => {
 
         console.log("INSIDE API GATEWAY ADMIN ROUTE");
