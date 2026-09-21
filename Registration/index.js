@@ -11,37 +11,58 @@ const axios = require("axios");
 
 
 // REGISTER API
+
 app.post(["/", "/register"], async (req, res) => {
     try {
+        const {
+            name,
+            firstname,
+            email,
+            password,
+            role,
+            phone,
+            mobile
+        } = req.body;
+
+        // Validate required fields
+        if (!email || !password || !role) {
+            return res.status(400).json({
+                message: "Email, password, and role are required"
+            });
+        }
 
         const response = await axios.post(
             "http://172.31.21.105:5002/users",
             {
-                name: req.body.name || req.body.firstname,
-                email: req.body.email,
-                password: req.body.password,
-                role: req.body.role,
-                phone: req.body.phone || req.body.mobile
+                name: name || firstname,
+                email,
+                password,
+                role,
+                phone: phone || mobile
             }
         );
 
-        res.status(201).json({
+        return res.status(201).json({
             message: "Registration successful",
             user: response.data
         });
 
     } catch (error) {
-
         console.error("REGISTRATION ERROR:", error.message);
 
+        // User service returned an error
         if (error.response) {
             return res.status(error.response.status).json({
                 message: "Registration failed",
-                error: error.response.data?.message || error.response.data
+                error:
+                    error.response.data?.message ||
+                    error.response.data ||
+                    "User service returned an error"
             });
         }
 
-        res.status(500).json({
+        // User service could not be reached
+        return res.status(503).json({
             message: "Registration failed",
             error: "User service unavailable"
         });
