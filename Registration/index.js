@@ -14,6 +14,7 @@ const axios = require("axios");
 
 app.post(["/", "/register"], async (req, res) => {
     try {
+
         const {
             name,
             firstname,
@@ -24,7 +25,7 @@ app.post(["/", "/register"], async (req, res) => {
             mobile
         } = req.body;
 
-        // Validate required fields
+        
         if (!email || !password || !role) {
             return res.status(400).json({
                 message: "Email, password, and role are required"

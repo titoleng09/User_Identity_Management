@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 
 // Database Connection URL
-const uri = process.env.MONGO_URI
+const uri = "mongodb+srv://toruleng_db_user:kcD9L4rX04bIeVb7@cluster0.tzoqqgg.mongodb.net/?appName=Cluster0"
 //OR
 //const uri = "mongodb://user1:<your password>@ac-irevfzj-shard-00-00.jh094ab.mongodb.net:27017,ac-irevfzj-shard-00-01.jh094ab.mongodb.net:27017,ac-irevfzj-shard-00-02.jh094ab.mongodb.net:27017/<your database name>?ssl=true&replicaSet=atlas-u04hq6-shard-0&authSource=admin&appName=MyCluster1
 
