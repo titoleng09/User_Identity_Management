@@ -42,7 +42,7 @@ app.use(
         console.log("INSIDE API GATEWAY ADMIN ROUTE");
 
         proxy.web(req, res, {
-            target: 'http://172.31.26.75:5001'
+            target: 'http://172.31.26.170:5001'
         });
 
     }
@@ -59,7 +59,7 @@ app.use(
         req.url = `/users${req.url}`;
 
         proxy.web(req, res, {
-            target: 'http://172.31.28.20:5002'
+            target: 'http://172.31.21.105:5002'
         });
 
     }

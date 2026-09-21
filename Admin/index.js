@@ -8,7 +8,7 @@ require('./dbconnect.js');
 
 app.use(bodyParser.json());
 
-const USER_SERVICE = "http://172.31.28.20:5002";
+const USER_SERVICE = "http://172.31.21.105:5002";
 
 app.get("/", (req, res) => {
     res.send("Hello Admin");

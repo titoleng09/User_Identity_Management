@@ -15,7 +15,7 @@ app.post(["/", "/register"], async (req, res) => {
     try {
 
         const response = await axios.post(
-            "http://172.31.28.20:5002/users",
+            "http://172.31.21.105:5002/users",
             {
                 name: req.body.name || req.body.firstname,
                 email: req.body.email,

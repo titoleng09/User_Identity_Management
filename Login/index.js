@@ -39,7 +39,7 @@ app.post(["/", "/log"], async (req, res) => {
 
         // Ask User Service to find the user
         const response = await axios.get(
-            `http://172.31.28.20:5002/users/email/${encodeURIComponent(email)}`
+            `http://172.31.21.105:5002/users/email/${encodeURIComponent(email)}`
         );
 
         const user = response.data;
